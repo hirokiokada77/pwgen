@@ -1,10 +1,11 @@
 mod constants;
+mod util;
 
 use clap::Parser;
 use rand::prelude::IndexedRandom;
 use std::process;
 
-use crate::constants::{RED_BOLD, RESET};
+use crate::util::print_error;
 
 #[derive(Parser, Debug)]
 #[clap(version)]
@@ -22,10 +23,7 @@ fn main() {
     let args = Args::parse();
 
     if args.length == 0 {
-        eprintln!(
-            "{}error{}: the password length cannot be zero",
-            RED_BOLD, RESET
-        );
+        print_error("the password length cannot be zero");
         process::exit(1);
     }
 
@@ -59,7 +57,7 @@ fn get_pattern_chars(pattern: &str) -> Vec<char> {
                     current_chars.push(ch);
                 }
             } else {
-                eprintln!("{}error{}: invalid character range", RED_BOLD, RESET);
+                print_error("invalid character range");
                 process::exit(1);
             }
         } else {
@@ -70,10 +68,7 @@ fn get_pattern_chars(pattern: &str) -> Vec<char> {
     chars.extend(current_chars);
 
     if chars.is_empty() {
-        eprintln!(
-            "{}error{}: the parsed character set is empty",
-            RED_BOLD, RESET
-        );
+        print_error("the parsed character set is empty");
         process::exit(1);
     }
 
