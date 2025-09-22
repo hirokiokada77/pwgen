@@ -17,6 +17,10 @@ struct Args {
     /// Character pattern for the password
     #[clap(short = 'p', long, default_value = "A-Za-z0-9")]
     pattern: String,
+
+    /// Do not print the trailing newline character
+    #[clap(short = 'n', long, default_value_t = false)]
+    no_newline: bool,
 }
 
 fn main() {
@@ -38,7 +42,11 @@ fn main() {
         }
     }
 
-    println!("{}", password);
+    if args.no_newline {
+        print!("{}", password);
+    } else {
+        println!("{}", password);
+    }
 }
 
 fn get_pattern_chars(pattern: &str) -> Vec<char> {
