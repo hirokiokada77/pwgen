@@ -1,6 +1,7 @@
 mod constants;
 mod util;
 
+use arboard::Clipboard;
 use clap::Parser;
 use rand::prelude::IndexedRandom;
 use std::process;
@@ -17,6 +18,10 @@ struct Args {
     /// Character pattern for the password
     #[clap(short = 'p', long, default_value = "A-Za-z0-9")]
     pattern: String,
+
+    /// Write the password to the clipboard
+    #[clap(short = 'c', long = "clipboard", default_value_t = false)]
+    write_to_clipboard: bool,
 
     /// Do not print the trailing newline character
     #[clap(short = 'n', long, default_value_t = false)]
@@ -42,10 +47,10 @@ fn main() {
         }
     }
 
-    if args.no_newline {
-        print!("{}", password);
+    if args.write_to_clipboard {
+        write_to_clipboard(&password);
     } else {
-        println!("{}", password);
+        write_to_stdout(&password, args.no_newline);
     }
 }
 
@@ -81,4 +86,17 @@ fn get_pattern_chars(pattern: &str) -> Vec<char> {
     }
 
     chars
+}
+
+fn write_to_clipboard(password: &str) {
+    let mut clipboard = Clipboard::new().unwrap();
+    clipboard.set().text(password).unwrap();
+}
+
+fn write_to_stdout(password: &str, no_newline: bool) {
+    if no_newline {
+        print!("{}", password);
+    } else {
+        println!("{}", password);
+    }
 }
