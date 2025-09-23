@@ -95,8 +95,8 @@ fn write_to_clipboard(password: &str) {
 
 fn write_to_stdout(password: &str, no_newline: bool) {
     if no_newline {
-        print!("{}", password);
+        print!("{password}");
     } else {
-        println!("{}", password);
+        println!("{password}");
     }
 }
