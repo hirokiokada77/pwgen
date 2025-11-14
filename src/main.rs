@@ -19,9 +19,9 @@ struct Args {
     #[clap(short = 'p', long, default_value = "A-Za-z0-9")]
     pattern: String,
 
-    /// Write the password to the clipboard
-    #[clap(short = 'c', long = "clipboard", default_value_t = false)]
-    write_to_clipboard: bool,
+    /// Copy the password to the clipboard
+    #[clap(short = 'c', long = "copy", default_value_t = false)]
+    copy_to_clipboard: bool,
 
     /// Do not print the trailing newline character
     #[clap(short = 'n', long, default_value_t = false)]
@@ -47,8 +47,8 @@ fn main() {
         }
     }
 
-    if args.write_to_clipboard {
-        write_to_clipboard(&password);
+    if args.copy_to_clipboard {
+        copy_to_clipboard(&password);
     } else {
         write_to_stdout(&password, args.no_newline);
     }
@@ -88,7 +88,7 @@ fn get_pattern_chars(pattern: &str) -> Vec<char> {
     chars
 }
 
-fn write_to_clipboard(password: &str) {
+fn copy_to_clipboard(password: &str) {
     let mut clipboard = Clipboard::new().unwrap();
     clipboard.set().text(password).unwrap();
 }
